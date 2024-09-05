@@ -21,6 +21,9 @@ class database:
     def close(self) -> None:
         self.conn.close()
 
+    def get_head(self,table) -> list:
+        return [column[1] for column in self.__call__(f"PRAGMA table_info({table})")]
+    
     def get_col(self,table,col_name,search:list=[]):
         """
         ```
