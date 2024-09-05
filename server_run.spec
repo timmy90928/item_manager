@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['sever_run.py'],
+    ['server_run.py'],
     pathex=[],
     binaries=[],
     datas=[('README.md', '.')],
@@ -21,7 +21,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='sever_run',
+    name='server_run',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -32,7 +32,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=r'C:\timmy\Program\item_manager\static\object-icon-2.ico',
+    icon=r'.\static\picture\object-icon-2.ico',
 )
 coll = COLLECT(
     exe,
@@ -41,5 +41,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='sever_run',
+    name='server_run',
 )
