@@ -1,4 +1,5 @@
 from datetime import timedelta,datetime
+from shutil import copy2
 
 def read_card() -> str:
     """
@@ -38,4 +39,5 @@ def msgw(title:str="Title", text:str="contant", style:int=0, time:int=0) -> int:
 def now_time() -> str:
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-
+def copy():
+    copy2()
