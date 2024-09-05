@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>{{ name }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename = 'styled_table.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+</head>
+<h1 class="title" >{{ name }}</h1>
+<table class="styled-table">
+    <thead>
+        <tr>
+            {% for head in heads %}
+                <th> {{ head }} </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+        {% for values in datas %}
+        <tr>
+            {% for value in values %}
+                <td> {{ value }} </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+</table>

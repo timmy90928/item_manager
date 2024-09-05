@@ -1,0 +1,60 @@
+/* Basic Reset and Font Settings */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Title Styling */
+.title {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Table Header Styling */
+.styled-table thead tr {
+    background-color: #4CAF50;
+    color: #ffffff;
+    text-align: center; /* Center-align header text */
+    font-weight: bold;
+}
+
+/* Table Cell Styling */
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: center; /* Center-align text in table cells */
+}
+
+/* Table Body Row Styling */
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+/* Alternate Row Coloring */
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+/* Bottom Border for Last Row */
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #4CAF50;
+}
+
+/* Hover Effect for Rows */
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
