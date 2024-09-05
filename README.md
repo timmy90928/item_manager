@@ -4,7 +4,7 @@ Assist the Department of Communications in developing an item management system.
 Develop
 -------
 ### Install Card Reader
-Download `NfcCode 感應卡應用程式 V*`
+Download `NfcCode 感應卡應用程式 V*` from [infothink](https://web.infothink.com.tw/zh-hant/node/8).
 
 ### Install Dependencies
 ```bash
