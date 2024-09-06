@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>管理員系統</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
     </head>
@@ -16,11 +17,38 @@
             <h1>國立中正大學 通訊工程學系</h1>
             <h2>物品管理系統</h2>
         </header>
-
+        
         <main>
-
+            <div class="content-wrapper">
+                <div class="header-section">
+                    <h3>物品清單</h3>
+                    <a href="#" class="add-button">新增物品</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>物品名稱</th>
+                            <th>財產編號</th>
+                            <th>借出狀況</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item[0] }}</td>
+                                <td>{{ item[1] }}</td>
+                                <td>{{ item[2] }}</td>
+                                <td>{{ item[3] }}</td>
+                                <td>{{ item[4] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </main>
-
+        
         <footer>
             <p>國立中正大學 人工智慧實驗室</p>
             <p>© 2024 Artificial Intelligence Laboratory</p>
