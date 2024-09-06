@@ -44,40 +44,6 @@ header h2 {
     font-size: 22px;
 }
 
-main {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.button-container {
-    display: flex;
-    flex-direction: column;
-    gap: 80px;
-}
-
-.btn {
-    display: inline-block;
-    padding: 15px 30px;
-    background-color: #3484ce;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 18px;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 200px;
-}
-
-.btn:hover {
-    background-color: #2b6ba7;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-}
-
 footer {
     background-color: #333;
     color: white;

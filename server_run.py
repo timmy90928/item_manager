@@ -12,9 +12,13 @@ def index():
 def show(table_name):
     return render_template('show.html',name=table_name,datas=db.get_col(table_name,'*'),heads=db.get_head(table_name))
 
-# @app.route("/admin")
-# def admin_page():
-#     return render_template('admin_page.html')
+@app.route("/admin")
+def admin():
+    return render_template('/admin/main_page.html')
+
+@app.route("/itemlist")
+def itemlist():
+    return render_template('/admin/item_list.html')
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port="120")
