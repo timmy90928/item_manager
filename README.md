@@ -15,6 +15,4 @@ pip install -r requirements.txt
 Run `server_run.py`
 
 ### Make
-```bash
-pyinstaller sever_run.spec
-```
+Run `make.bat`. ([tutorial](./docs/build.md))
