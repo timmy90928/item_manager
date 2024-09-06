@@ -1,5 +1,6 @@
-from flask import Flask,render_template,request,url_for
+from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort
 from utils.db import database
+# from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user # https://ithelp.ithome.com.tw/articles/10328420
 
 db=database('./writable/item_manager.db')
 app = Flask("Key Manager")
@@ -21,4 +22,4 @@ def itemlist():
     return render_template('/admin/item_list.html')
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port="120")
+    app.run(host="0.0.0.0",port="429")
