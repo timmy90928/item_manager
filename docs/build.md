@@ -20,7 +20,7 @@ xcopy "%SOURCE_DIR%\static\" 	"%DEST_DIR%\static\" 	/s /e /i /y
 xcopy "%SOURCE_DIR%\writable\" 	"%DEST_DIR%\writable\" 	/s /e /i /y
 ```
 
-### 使用 Compress-Archive 指令，將打包好的資料夾壓縮
+### 使用 [Compress-Archive] 指令，將打包好的資料夾壓縮
 ```bash
 set FOLDER_TO_COMPRESS=%DEST_DIR%\*
 set OUTPUT_FILE=%DEST_DIR%.zip
