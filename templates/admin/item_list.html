@@ -66,7 +66,7 @@
                     var itemId = $(this).data('id');
                     if (confirm('確定要刪除這個項目嗎？')) {
                         $.ajax({
-                            url: '/delete_item/' + itemId,
+                            url: '/process_database/delete_item?item_id=' + itemId,
                             type: 'POST',
                             success: function(result) {
                                 alert('項目已成功刪除');

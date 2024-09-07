@@ -1,10 +1,10 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort,send_from_directory
-from flask import jsonify, request
 from utils.db import database
 from utils.utils import now_time,convert_size,datetime
 from os import getcwd,path,makedirs,listdir,stat,remove
 from time import time
 from platform import system,node
+from utils.web import process_db
     
 # from utils.web import set_cookie,get_cookie
 # from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user # https://ithelp.ithome.com.tw/articles/10328420
@@ -17,6 +17,7 @@ app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the addre
 app.config['SERVER_RUN_TIME'] = now_time()
 
 db=database('./writable/item_manager.db')
+pdb = process_db(db)
 clients = {}
 
 @app.before_request
@@ -99,7 +100,6 @@ def server_info():
         '目前連線IP': str('、'.join(clients)),
     }
     return render_template('server_info.html',data=data)
-    return f"目前有 {len(clients)} 個連線: {str('、'.join(clients))} (Server Start Time: {app.config['SERVER_RUN_TIME']})"
 
 @app.route("/show/<table_name>")
 def show(table_name):
@@ -125,50 +125,27 @@ def itemlist():
         ])
     return render_template('/admin/item_list.html', items=formatted_items)
 
-@app.route('/delete_item/<int:item_id>', methods=['POST'])
-def delete_item(item_id):
-    try:
-        result = db.delete('item', ['id', str(item_id)])
-        
-        if result:
-            return jsonify({"success": True, "message": "Item deleted successfully"}), 200
-        else:
-            return jsonify({"success": False, "message": "Deletion cancelled or item not found"}), 404
-    except Exception as e:
-        return jsonify({"success": False, "message": str(e)}), 500
+# @app.route('/delete_item/<int:item_id>', methods=['POST'])
+# @app.route('/additem', methods=['POST'])
     
 @app.route("/add_item")
 def add_item():
     return render_template('/admin/add_item.html')
     
-@app.route('/additem', methods=['POST'])
-def additem():
-    try:
-        item_name = request.form['itemName'].strip()
-        item_number = request.form['itemNumber']
-        note = request.form.get('note', '')
-        
-        if not item_name:
-            return jsonify({"success": False, "message": "物品名稱不能為空"}), 400
-        
-        # 建立 col_name 和 value 字符串
-        col_name = 'item, number, borrow, note'
-        value = f"{repr(item_name)}, {repr(item_number)}, NULL, {repr(note)}"
-        
-        db.add('item', col_name, value)
-        
-        return jsonify({"success": True, "message": "物品新增成功"}), 200
-    except Exception as e:
-        print(f"新增物品時發生錯誤: {str(e)}")
-        return jsonify({"success": False, "message": str(e)}), 500
-    
-@app.route("/database/<method>")
+@app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):
-    assert request.method == 'POST', 'Only POST requests are accepted'
-    if request.method == 'POST':
-        print(request.form)
-        return redirect(url_for('admin'))
-    return render_template('admin/database.html')
-
+    match method:
+        case 'delete_item':
+            assert request.method == 'POST', 'Only POST requests are accepted'
+            return pdb.delete_item(request.args.get('item_id'))
+        case 'additem': 
+            assert request.method == 'POST', 'Only POST requests are accepted'
+            item_name = request.form['itemName'].strip()
+            item_number = request.form['itemNumber']
+            note = request.form.get('note', '')
+            return pdb.additem(item_name, item_number, note)
+        case _:
+            pass
+  
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port="429")

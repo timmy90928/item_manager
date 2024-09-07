@@ -57,8 +57,8 @@
                     }
                     
                     $.ajax({
-                        url: '/additem',
-                        type: 'POST',
+                        url: '/process_database/additem',
+                        type: 'GET',
                         data: $(this).serialize(),
                         success: function(response) {
                             if (response.success) {
