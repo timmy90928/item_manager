@@ -9,32 +9,55 @@ main {
 .admin-title {
     font-size: 24px;
     color: #024991;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 150px;
+    margin-bottom: 40px;
     text-align: center;
 }
 
-.button-container {
+.add-item-form {
+    width: 100%;
+    max-width: 300px;
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
     align-items: center;
+}
+
+.form-group {
     width: 100%;
-    max-width: 250px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #024991;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 .btn {
     display: block;
-    width: 100%;
-    padding: 15px 0;
+    width: 50%;
+    padding: 12px 0;
     background-color: #3484ce;
     color: white;
     text-decoration: none;
     border-radius: 6px;
-    font-size: 18px;
+    font-size: 16px;
     text-align: center;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    margin: 15px auto;
 }
 
 .btn:hover {
@@ -43,10 +66,10 @@ main {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
-.btn-logout {
-    background-color: #d9534f;
+.btn-submit {
+    background-color: #4CAF50;
 }
 
-.btn-logout:hover {
-    background-color: #c9302c;
+.btn-submit:hover {
+    background-color: #45a049;
 }

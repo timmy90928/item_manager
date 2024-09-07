@@ -1,4 +1,5 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort,send_from_directory
+from flask import jsonify, request
 from utils.db import database
 from utils.utils import now_time,convert_size,datetime
 from os import getcwd,path,makedirs,listdir,stat,remove
@@ -11,7 +12,7 @@ from platform import system,node
 
 app = Flask("Key Manager")
 app.secret_key = 'ailab120'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set the maximum upload file size to 16MB.
+# app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set the maximum upload file size to 16MB.
 app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the address of the upload folder.
 app.config['SERVER_RUN_TIME'] = now_time()
 
@@ -77,7 +78,7 @@ def delete_file(filename: str):
         return redirect(url_for('alert',message='無法刪除預設檔案'))
     if path.isfile(file_path):
         try:
-            # remove(file_path)
+            remove(file_path)
             return redirect(url_for('upload'))
         except Exception as e:
             return str(e), 500
@@ -124,6 +125,43 @@ def itemlist():
         ])
     return render_template('/admin/item_list.html', items=formatted_items)
 
+@app.route('/delete_item/<int:item_id>', methods=['POST'])
+def delete_item(item_id):
+    try:
+        result = db.delete('item', ['id', str(item_id)])
+        
+        if result:
+            return jsonify({"success": True, "message": "Item deleted successfully"}), 200
+        else:
+            return jsonify({"success": False, "message": "Deletion cancelled or item not found"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500
+    
+@app.route("/add_item")
+def add_item():
+    return render_template('/admin/add_item.html')
+    
+@app.route('/additem', methods=['POST'])
+def additem():
+    try:
+        item_name = request.form['itemName'].strip()
+        item_number = request.form['itemNumber']
+        note = request.form.get('note', '')
+        
+        if not item_name:
+            return jsonify({"success": False, "message": "物品名稱不能為空"}), 400
+        
+        # 建立 col_name 和 value 字符串
+        col_name = 'item, number, borrow, note'
+        value = f"{repr(item_name)}, {repr(item_number)}, NULL, {repr(note)}"
+        
+        db.add('item', col_name, value)
+        
+        return jsonify({"success": True, "message": "物品新增成功"}), 200
+    except Exception as e:
+        print(f"新增物品時發生錯誤: {str(e)}")
+        return jsonify({"success": False, "message": str(e)}), 500
+    
 @app.route("/database/<method>")
 def process_database(method):
     assert request.method == 'POST', 'Only POST requests are accepted'
