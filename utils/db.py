@@ -46,15 +46,27 @@ class database:
         col_name='*' if col_name==None else f"{col_name}"
         return self.__call__(f"SELECT {col_name} FROM {table} WHERE {row_name[0]} = '{row_name[1]}'")
         
-    def delete(self,table:str,row_name:list):
+    # def delete(self,table:str,row_name:list):
+    #     """
+    #     db.delete('Data',['ID','1'])
+    #     """
+    #     if msgw('刪除','請問是否要刪除?',1,0)==1:
+    #         self.__call__(f"DELETE FROM {table} WHERE {row_name[0]} = '{row_name[1]}'")
+    #         self.commit()
+    #         return True
+    #     else:
+    #         return False
+
+    def delete(self, table: str, row_name: list):
         """
         db.delete('Data',['ID','1'])
         """
-        if msgw('刪除','請問是否要刪除?',1,0)==1:
+        try:
             self.__call__(f"DELETE FROM {table} WHERE {row_name[0]} = '{row_name[1]}'")
             self.commit()
             return True
-        else:
+        except Exception as e:
+            print(f"Error deleting from {table}: {e}")
             return False
         
     def add(self,table:str,col_name:str,value:str,commit:bool=True):
