@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and Download Files</title>
+</head>
+<body>
+    <h1>File Upload</h1>
+
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+
+    <h2>Uploaded Files</h2>
+
+    <ul>
+        {% for file in files %}
+            <li>
+                {{ file }} - <a href="{{ url_for('download', filename=file) }}">Download</a>
+            </li>
+        {% else %}
+            <li>No files uploaded yet.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

@@ -1,13 +1,14 @@
 from datetime import timedelta,datetime
 from shutil import copy2
-
-def read_card() -> str:
+from base64 import b64encode,b64decode
+from typing import Union
+    
+def read_card_data() -> str:
     """
+    Reads card data from the card reader.
     """
-    print("請刷卡...")
-    card_data = input()  # Wait for user to swipe card from card reader.
-    return card_data
-    print(f"讀取到的卡資料：{card_data}")
+    input("請刷卡...")
+    return input()
 
 def msgw(title:str="Title", text:str="contant", style:int=0, time:int=0) -> int:
     """
@@ -39,5 +40,53 @@ def msgw(title:str="Title", text:str="contant", style:int=0, time:int=0) -> int:
 def now_time() -> str:
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-def copy():
-    copy2()
+def copy_file(dst: str, src: str = './writable/item_manager.db') -> None:
+    """
+    Copies a file from the `src` path to the `dst` path.
+
+    :param src: The source file path. Must be a Path object.
+    :param dst: The destination file path. Must be a Path object.
+    :return: None
+    """
+    if not src or not dst:
+        raise ValueError("Both src and dst must be non-empty")
+    try:
+        copy2(src, dst)
+    except OSError as e:
+        raise OSError(f"Error copying file from {src} to {dst}: {e}") from e
+
+class base64:
+    """
+    Base64 encoding and decoding.
+
+    ## Example
+
+    ```
+    value_str = 'abcde'
+    value_list = ['ac','cd']
+    b64_str = base64(value_str).encode()
+    b64_list = base64(value_list).encode()
+
+    print(b64_str)      # YWJjZGU=
+    print(b64_list)     # YWMsY2Q=
+    print(base64(b64_str).decode())     # abcde
+    print(base64(b64_list).decode())    # ['ac', 'cd']
+    ```
+    """
+    # __slots__ = ("data",)
+
+    def __init__(self, data: Union[str,list]) -> None:
+        self.data = str(','.join(data))  if isinstance(data, list) else str(data)
+
+    def encode(self) -> str:
+        """Encode the stored data to a base64 string."""
+        return b64encode(self.data.encode()).decode("utf-8")
+    def decode(self) -> Union[str, list[str]]:
+        """
+        Decode the stored base64 string to the original string.
+
+        Returns a list of strings if the original data was a list, otherwise a single string.
+        """
+        decoded_string = b64decode(self.data).decode()
+        return decoded_string.split(",") if "," in decoded_string else decoded_string
+        
