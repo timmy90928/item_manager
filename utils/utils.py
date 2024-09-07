@@ -2,6 +2,7 @@ from datetime import timedelta,datetime
 from shutil import copy2
 from base64 import b64encode,b64decode
 from typing import Union
+import math
     
 def read_card_data() -> str:
     """
@@ -90,3 +91,11 @@ class base64:
         decoded_string = b64decode(self.data).decode()
         return decoded_string.split(",") if "," in decoded_string else decoded_string
         
+def convert_size(size_bytes):
+    if size_bytes == 0:
+        return "0B"
+    size_name = ("B", "KB", "MB", "GB", "TB")
+    i = int(math.floor(math.log(size_bytes, 1024)))
+    p = math.pow(1024, i)
+    s = round(size_bytes / p, 2)
+    return f"{s} {size_name[i]}"

@@ -1,29 +1,57 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload and Download Files</title>
-</head>
-<body>
-    <h1>File Upload</h1>
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>檔案管理</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+    </head>
+    <body>
+        <h1>File Upload</h1>
 
-    <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
+        <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
+            <input type="file" name="file">
+            <input type="submit" value="Upload">
+        </form>
 
-    <h2>Uploaded Files</h2>
+        <h2>Uploaded Files</h2>
+        <main>
+        <div class="content-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>檔案名稱</th>
+                        <th>檔案大小</th>
+                        <th>上次存取時間</th>
+                        <th>上次修改時間</th>
+                        <th>建立時間</th>
+                        <th>下載</th>
+                        <th>刪除</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                        <tr>
+                            <td>{{ file[0] }}</td>
+                            <td>{{ file[1] }}</td>
+                            <td>{{ file[2] }}</td>
+                            <td>{{ file[3] }}</td>
+                            <td>{{ file[4] }}</td>
+                            <td><a href="{{ url_for('download', filename=file[0]) }}">Download</a></td>
+                            <td><a href="{{ url_for('delete_file', filename=file[0]) }}">Delete</a></td>
+                        </tr>
+                    {% else %}
+                        <a>No files uploaded yet.</a>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </main>
+        
+        
 
-    <ul>
-        {% for file in files %}
-            <li>
-                {{ file }} - <a href="{{ url_for('download', filename=file) }}">Download</a>
-            </li>
-        {% else %}
-            <li>No files uploaded yet.</li>
-        {% endfor %}
-    </ul>
-
-</body>
+    </body>
 </html>
