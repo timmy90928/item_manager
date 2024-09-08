@@ -116,7 +116,7 @@ def item(page):
             return render_template('/admin/add_item.html')
         case 'manager':
             table_name = 'item'
-            item = db.get_col(table_name, '*', ['id', '%'])
+            item = db.get_col(table_name, '*')
             # 確保數據格式對應表格標題
             formatted_items = []
             for item in item:
@@ -130,7 +130,7 @@ def item(page):
             return render_template('/admin/item_list.html', items=formatted_items)
         case 'condition':
             table_name = 'item_record'
-            item_condition = db.get_col(table_name, '*', ['id', '%'])
+            item_condition = db.get_col(table_name, '*')
             # 確保數據格式對應表格標題
             formatted_items = []
             for item in item_condition:
@@ -146,9 +146,27 @@ def item(page):
         case _:
             pass
 
-@app.route("/search")
+@app.route("/search", methods=['GET', 'POST'])
 def search():
-    return render_template('/admin/search_history.html')
+    if request.method == 'POST':
+        borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
+        _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
+        person  = f"%{request.form.get('studentId')}%" if request.form.get('studentId') else "%"
+        item    = f"%{request.form.get('propertyNumber')}%" if request.form.get('propertyNumber') else "%"
+        note    = f"%{request.form.get('note')}%" if request.form.get('note') else "%"
+        
+        search = {
+            'borrow': borrow,
+            'return': _return,
+            'person': person,
+            'item': item,
+            'note': note
+        }
+        datas = db.get_col('item_record', '*', search)
+        return render_template('/admin/search_history.html',datas=datas)
+    
+    datas = db.get_col('item_record', '*', ['id', '%'])
+    return render_template('/admin/search_history.html',datas=datas)
 
 @app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):
@@ -162,6 +180,8 @@ def process_database(method):
             item_number = request.form['itemNumber']
             note = request.form.get('note', '')
             return pdb.additem(item_name, item_number, note)
+        case 'search_history':
+            assert request.method == 'POST', 'Only POST requests are accepted'
         case _:
             pass
   

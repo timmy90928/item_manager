@@ -20,25 +20,27 @@
 
         <main>
             <h3 class="admin-title">搜尋歷史紀錄</h3>
-            <form id="searchHistoryForm" class="search-history-form">
+            <form id="searchHistoryForm" class="search-history-form" action="{{ url_for('search') }} " method="POST">
                 <div class="form-group">
                     <label>借出時間：</label>
-                    <input type="number" id="borrowYear" name="borrowYear" placeholder="年" min="1900" max="2100">
+                    <input type="text" id="borrowDate" name="borrowDate" >
+                    <!-- <input type="number" id="borrowYear" name="borrowYear" placeholder="年" min="1900" max="2100">
                     <input type="number" id="borrowMonth" name="borrowMonth" placeholder="月" min="1" max="12">
-                    <input type="number" id="borrowDay" name="borrowDay" placeholder="日" min="1" max="31">
+                    <input type="number" id="borrowDay" name="borrowDay" placeholder="日" min="1" max="31"> -->
                 </div>
                 <div class="form-group">
                     <label>歸還時間：</label>
-                    <input type="number" id="returnYear" name="returnYear" placeholder="年" min="1900" max="2100">
+                    <input type="text" id="returnDate" name="returnDate" >
+                    <!-- <input type="number" id="returnYear" name="returnYear" placeholder="年" min="1900" max="2100">
                     <input type="number" id="returnMonth" name="returnMonth" placeholder="月" min="1" max="12">
-                    <input type="number" id="returnDay" name="returnDay" placeholder="日" min="1" max="31">
+                    <input type="number" id="returnDay" name="returnDay" placeholder="日" min="1" max="31"> -->
                 </div>
                 <div class="form-group">
                     <label for="studentId">學生證卡號：</label>
                     <input type="text" id="studentId" name="studentId">
                 </div>
                 <div class="form-group">
-                    <label for="propertyNumber">財產編號：</label>
+                    <label for="propertyNumber">財產流水號：</label>
                     <input type="text" id="propertyNumber" name="propertyNumber">
                 </div>
                 <div class="form-group">
@@ -47,7 +49,32 @@
                 </div>
                 <button type="submit" class="btn btn-submit">搜尋</button>
             </form>
-            <div id="searchResults"></div>
+            <div id="searchResults" class="content-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>學生證卡號</th>
+                            <th>財產編號</th>
+                            <th>借出狀況</th>
+                            <th>歸還狀況</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in datas %}
+                            <tr>
+                                <td>{{ data[0] }}</td>
+                                <td>{{ data[1] }}</td>
+                                <td>{{ data[2] }}</td>
+                                <td>{{ data[3] }}</td>
+                                <td>{{ data[4] }}</td>
+                                <td>{{ data[5] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </main>
 
         <footer>

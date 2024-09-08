@@ -24,7 +24,7 @@ class database:
     def get_head(self,table) -> list:
         return [column[1] for column in self.__call__(f"PRAGMA table_info({table})")]
     
-    def get_col(self,table,col_name,search:list=[]):
+    def get_col(self,table,col_name,search:dict={}):
         """
         ```
         print(db.get_col('Hospital','name',['name','%小%']))
@@ -32,10 +32,15 @@ class database:
         ```
         """
         # SELECT DISTINCT  無重複
-        if search==[]:
+        if search=={}:
             return self.__call__(f"SELECT {col_name} FROM {table}")
         else:
-            return self.__call__(f"SELECT {col_name} FROM {table} WHERE {search[0]} LIKE '{search[1]}'")
+            _like = ''
+            for n ,(key,value) in  enumerate(search.items()):
+                if n==0: _like += f"{key} LIKE '{value}'"
+                else: _like += f" AND {key} LIKE '{value}'"
+            print(f"SELECT {col_name} FROM {table} WHERE {_like}")
+            return self.__call__(f"SELECT {col_name} FROM {table} WHERE {_like}")
         
     def get_row(self,table:str,row_name:list,col_name=None):
         """
