@@ -99,7 +99,7 @@ def server_info():
         '目前連線數':len(clients),
         '目前連線IP': str('、'.join(clients)),
     }
-    return render_template('server_info.html',data=data)
+    return render_template('admin/server_info.html',data=data)
 
 @app.route("/show/<table_name>")
 def show(table_name):
@@ -131,6 +131,23 @@ def itemlist():
 @app.route("/add_item")
 def add_item():
     return render_template('/admin/add_item.html')
+
+@app.route("/item_condition")
+def item_condition():
+    table_name = 'item_record'
+    item_condition = db.get_col(table_name, '*', ['id', '%'])
+    # 確保數據格式對應表格標題
+    formatted_items = []
+    for item in item_condition:
+        formatted_items.append([
+            item[0],  # ID
+            item[1],  # 學生證卡號
+            item[2],  # 財產編號
+            item[3],  # 借出狀況
+            item[4],  # 歸還狀況
+            item[5],  # 備註
+        ])
+    return render_template('/admin/item_condition.html', items=formatted_items)
     
 @app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):

@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>伺服器資訊</title>
+        <title>搜尋紀錄</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/add_item.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
     </head>
@@ -15,31 +15,13 @@
         </div>
         <header>
             <h1>國立中正大學 通訊工程學系</h1>
-            <h2>伺服器資訊</h2>
+            <h2>物品管理系統</h2>
         </header>
-        
+
         <main>
-            <div class="content-wrapper">
-         
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Key</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for key,value in data.items() %}
-                            <tr>
-                                <td>{{ key }}</td>
-                                <td>{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <h3 class="admin-title">搜尋歷史紀錄</h3>
         </main>
-        
+
         <footer>
             <p>國立中正大學 人工智慧實驗室</p>
             <p>© 2024 Artificial Intelligence Laboratory</p>

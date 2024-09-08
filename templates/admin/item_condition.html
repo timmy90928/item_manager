@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>物品清單</title>
+        <title>物品借還清單</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
@@ -22,18 +22,17 @@
             <div class="content-wrapper">
                 <div class="header-section">
                     <a href="{{ url_for('admin') }}" class="return-button">返回管理員介面</a>
-                    <h3>物品清單</h3>
-                    <a href="{{ url_for('add_item') }}" class="add-button">新增物品</a>
+                    <h3>物品借還清單</h3>
                 </div>
                 <table>
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>物品名稱</th>
+                            <th>學生證卡號</th>
                             <th>財產編號</th>
                             <th>借出狀況</th>
+                            <th>歸還狀況</th>
                             <th>備註</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,9 +43,7 @@
                                 <td>{{ item[2] }}</td>
                                 <td>{{ item[3] }}</td>
                                 <td>{{ item[4] }}</td>
-                                <td>
-                                    <button class="delete-button" data-id="{{ item[0] }}">刪除</button>
-                                </td>
+                                <td>{{ item[5] }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -58,27 +55,5 @@
             <p>國立中正大學 人工智慧實驗室</p>
             <p>© 2024 Artificial Intelligence Laboratory</p>
         </footer>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('.delete-button').click(function() {
-                    var itemId = $(this).data('id');
-                    if (confirm('確定要刪除這個項目嗎？')) {
-                        $.ajax({
-                            url: '/process_database/delete_item?item_id=' + itemId,
-                            type: 'POST',
-                            success: function(result) {
-                                alert('項目已成功刪除');
-                                location.reload();
-                            },
-                            error: function(error) {
-                                alert('刪除失敗，請稍後再試');
-                            }
-                        });
-                    }
-                });
-            });
-        </script>
     </body>
 </html>
