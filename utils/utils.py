@@ -3,6 +3,10 @@ from shutil import copy2
 from base64 import b64encode,b64decode
 from typing import Union
 import math
+from hashlib import sha3_256
+def sha(text:str) -> str:
+    return sha3_256(text.encode()).hexdigest()
+
     
 def read_card_data() -> str:
     """

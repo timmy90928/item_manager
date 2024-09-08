@@ -1,6 +1,6 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort,send_from_directory
 from utils.db import database
-from utils.utils import now_time,convert_size,datetime,copy_file
+from utils.utils import now_time,convert_size,datetime,copy_file,sha
 from os import getcwd,path,makedirs,listdir,stat,remove
 from time import time
 from platform import system,node
@@ -11,7 +11,7 @@ from utils.web import process_db, check_file
 
 
 app = Flask("Key Manager")
-app.secret_key = '6991728715539641924' # ailab120
+app.secret_key = '92644cb198bc1416d96563067f306ba738bc11750e0f163017e8ddfb8f2d71a6' # ailab120
 # app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set the maximum upload file size to 16MB.
 app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the address of the upload folder.
 app.config['SERVER_RUN_TIME'] = now_time()
@@ -89,6 +89,21 @@ def delete_file(filename: str):
 def index():
     return render_template('index.html')
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        verify = db.get_row('account', ['name',username],'password,permissions')[0]
+
+        if  sha(password) == verify[0] and verify[1] == 'admin':
+            return redirect(url_for('admin'))
+        else:
+            return redirect(url_for('alert',message='帳號密碼錯誤'))
+    return render_template('login.html')
+
+def index():
+    return render_template('login.html')
 @app.route("/server_info")
 def server_info():
     data = {
