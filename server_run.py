@@ -101,7 +101,7 @@ def server_info():
         '目前連線數':len(clients),
         '目前連線IP': str('、'.join(clients)),
     }
-    return render_template('server_info.html',data=data)
+    return render_template('admin/server_info.html',data=data)
 
 @app.route("/show/<table_name>")
 def show(table_name):
