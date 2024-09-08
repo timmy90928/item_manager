@@ -60,7 +60,7 @@ def upload():
     for file in files:
         file_info = stat(path.join(app.config['UPLOAD_FOLDER'], file))
         data.append([file,convert_size(file_info.st_size),time_convert(file_info.st_atime),time_convert(file_info.st_mtime),time_convert(file_info.st_ctime)]) # 檔案名稱、檔案大小、上次存取時間、上次修改時間、建立時間
-    return render_template('upload.html', files=data)
+    return render_template('admin/upload.html', files=data)
 
 @app.route("/download/<filename>")
 def download(filename: str):
