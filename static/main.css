@@ -6,18 +6,11 @@ main {
     padding: 40px 20px;
 }
 
-.admin-title {
-    font-size: 22px;
-    color: #024991;
-    margin-top: 30px;
-    margin-bottom: 60px;
-    text-align: center;
-}
-
 .button-container {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    margin-top: 180px;
+    gap: 80px;
     align-items: center;
     width: 100%;
     max-width: 250px;
@@ -41,12 +34,4 @@ main {
     background-color: #2b6ba7;
     transform: translateY(-3px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-}
-
-.btn-logout {
-    background-color: #d9534f;
-}
-
-.btn-logout:hover {
-    background-color: #c9302c;
 }
