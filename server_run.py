@@ -146,6 +146,10 @@ def item(page):
         case _:
             pass
 
+@app.route("/search")
+def search():
+    return render_template('/admin/search_history.html')
+
 @app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):
     match method:
