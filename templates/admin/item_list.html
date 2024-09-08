@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>物品清單</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
@@ -23,6 +23,7 @@
                 <div class="header-section">
                     <a href="{{ url_for('admin') }}" class="return-button">返回管理員介面</a>
                     <h3>物品清單</h3>
+                    <a href="{{ url_for('item', page='add') }}" class="add-button">新增物品</a>
                     <a href="{{ url_for('item', page='add') }}" class="add-button">新增物品</a>
                 </div>
                 <table>

@@ -1,6 +1,7 @@
 # timmt
 test.py
 temp/
+writable/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

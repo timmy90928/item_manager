@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>管理員系統</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/main_page.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
@@ -19,13 +19,10 @@
         </header>
 
         <main>
-            <h3 class="admin-title">管理員介面</h3>
             <div class="button-container">
-                <a href="{{ url_for('itemlist') }}" class="btn">管理物品清單</a>
-                <a href="{{ url_for('item_condition') }}" class="btn">物品借出狀況</a>
-                <a href="#" class="btn">搜尋歷史紀錄</a>
-                <a href="{{ url_for('server_info') }}" class="btn">伺服器資訊</a>
-                <a href="#" class="btn btn-logout">登出</a>
+                <a href="#" class="btn">物品借出</a>
+                <a href="#" class="btn">物品歸還</a>
+                <a href="{{ url_for('admin') }}" class="btn">管理員登入</a>
             </div>
         </main>
 
