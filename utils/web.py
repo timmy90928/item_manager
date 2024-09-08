@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, Request
 from utils.db import database
 
 def return_page(success:str, message:str, state:int):
@@ -33,3 +33,11 @@ class process_db:
         except Exception as e:
             print(f"新增物品時發生錯誤: {str(e)}")
             return return_page(False, str(e), 500) # jsonify({"success": False, "message": str(e)}), 500
+    
+def check_file(request:Request):
+    if 'file' not in request.files:
+        raise AssertionError('No file part')
+    file = request.files['file']
+    if file.filename == '':
+        raise AssertionError('No selected file')
+    return file

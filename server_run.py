@@ -1,10 +1,10 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort,send_from_directory
 from utils.db import database
-from utils.utils import now_time,convert_size,datetime
+from utils.utils import now_time,convert_size,datetime,copy_file
 from os import getcwd,path,makedirs,listdir,stat,remove
 from time import time
 from platform import system,node
-from utils.web import process_db
+from utils.web import process_db, check_file
     
 # from utils.web import set_cookie,get_cookie
 # from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user # https://ithelp.ithome.com.tw/articles/10328420
@@ -46,14 +46,12 @@ def upload():
     Handles an upload request by saving the file to the configured upload folder.
     """
     if request.method == 'POST':
-        if 'file' not in request.files:
-            return 'No file part'
-        file = request.files['file']
-        if file.filename == '':
-            return 'No selected file'
-        if file:
-            file.save(path.join(app.config['UPLOAD_FOLDER'], file.filename))
-            return redirect(url_for('upload'))
+        try: file = check_file(request)
+        except AssertionError as e: return str(e), 500
+        if file.filename == 'item_manager.db':
+            copy_file(f'./writable/item_manager_{now_time().replace("-","_").replace(" ","_").replace(":","_")}.db')
+        file.save(path.join(app.config['UPLOAD_FOLDER'], file.filename))
+        return redirect(url_for('upload'))
 
     data = []
     files = listdir(app.config['UPLOAD_FOLDER'])
