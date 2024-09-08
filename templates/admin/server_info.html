@@ -3,9 +3,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>管理員系統</title>
+        <title>伺服器資訊</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/main_page.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
     </head>
@@ -17,18 +17,32 @@
             <h1>國立中正大學 通訊工程學系</h1>
             <h2>物品管理系統</h2>
         </header>
-
+        
         <main>
-            <h3 class="admin-title">管理員介面</h3>
-            <div class="button-container">
-                <a href="{{ url_for('item',page='manager') }}" class="btn">管理物品清單</a>
-                <a href="{{ url_for('item',page='condition') }}" class="btn">物品借出狀況</a>
-                <a href="#" class="btn">搜尋歷史紀錄</a>
-                <a href="{{ url_for('server_info') }}" class="btn">伺服器資訊</a>
-                <a href="#" class="btn btn-logout">登出</a>
+            <div class="content-wrapper">
+                <div class="header-section">
+                    <a href="{{ url_for('admin') }}" class="return-button">返回管理員介面</a>
+                    <h3>伺服器資訊</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>內容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key,value in data.items() %}
+                            <tr>
+                                <td>{{ key }}</td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </main>
-
+        
         <footer>
             <p>國立中正大學 人工智慧實驗室</p>
             <p>© 2024 Artificial Intelligence Laboratory</p>
