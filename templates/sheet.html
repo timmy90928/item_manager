@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'>
+<html>
+    <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+
+        <title>表單</title>
+        <script language='javascript'>
+            function FormLoad(){
+                document.form1.username.focus();	
+            }		
+        </script>
+    </head>
+
+    <body>
+        <div class="background-container">
+            <img src="{{ url_for('static', filename='picture/university_logo.png') }}" class="background-watermark">
+        </div>
+        <header>
+            <h1>國立中正大學 通訊工程學系</h1>
+            <h2>物品管理系統</h2>
+        </header>
+        <div class="container">
+            <h1>表單</h1>
+            <form action="/process_database/borrow_and_return" method="post">
+                <div class="form-group">
+                    <label >物品流水號：</label>
+                    <input name='item_id' type='text' id='item_id' value="{{datas['item_id']}}" readonly>
+                </div>
+                <div class="form-group">
+                    <label >物品名稱：</label>
+                    <input name='item_name' type='text' id='item_name'  value="{{datas['item_name']}}"readonly>
+                </div>
+                <div class="form-group"></div>
+                    <label >財產編號：</label>
+                    <input name='item_number' type='text' id='password' value="{{datas['item_number']}}" readonly>
+                </div>
+                <div class="form-group"></div>
+                    <label >借出時間：</label>
+                    <input name='borrow_date' type='text' id='password' value="{{datas['borrow_date']}}" readonly>
+                </div>
+                <div class="form-group"></div>
+                    <label >歸還時間：</label>
+                    <input name='return_date' type='text' id='password' value="{{datas['return_date']}}" readonly>
+                </div>
+                <div class="form-group"></div>
+                    <label >學號：</label>
+                    <input name='person' type='text' id='person' maxlength='20' >
+                </div>
+                <div class="form-group"></div>
+                    <label >備註：</label>
+                    <input name='note' type='text' id='note' maxlength='20'>
+                </div>
+                <input name='new_id' type='hidden' id='new_id' value="{{datas['new_id']}}">
+                <div class="button-group">
+                    <div>
+                        <input type='submit' value='送出'>
+                        <input type='reset'  value='重設'>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <footer>
+            <p>國立中正大學 人工智慧實驗室</p>
+            <p>© 2024 Artificial Intelligence Laboratory</p>
+        </footer>
+    </body>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+</html>

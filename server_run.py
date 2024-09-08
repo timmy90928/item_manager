@@ -39,7 +39,6 @@ def alert(message: str) -> None:
     """Prints an alert message to the terminal."""
     return render_template('alert.html', message=message)
 
-
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     """
@@ -87,7 +86,9 @@ def delete_file(filename: str):
     
 @app.route("/")
 def index():
-    return render_template('index.html')
+    table_name = 'item'
+    item = db.get_col(table_name, '*')
+    return render_template('/admin/item_list.html', items=item,title='物品管理系統')
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -102,8 +103,6 @@ def login():
             return redirect(url_for('alert',message='帳號密碼錯誤'))
     return render_template('login.html')
 
-def index():
-    return render_template('login.html')
 @app.route("/server_info")
 def server_info():
     data = {
@@ -142,7 +141,7 @@ def item(page):
                     item[3],  # 借出狀況
                     item[4]   # 備註
                 ])
-            return render_template('/admin/item_list.html', items=formatted_items)
+            return render_template('/admin/item_list.html', items=formatted_items,title='物品清單')
         case 'condition':
             table_name = 'item_record'
             item_condition = db.get_col(table_name, '*')
@@ -183,6 +182,23 @@ def search():
     datas = db.get_col('item_record', '*')
     return render_template('/admin/search_history.html',datas=datas)
 
+@app.route("/sheet/<item_id>/<method>",methods=['GET'])
+def sheet(item_id,method):
+    assert 'return' in method or 'borrow' in method, 'Invalid method'
+    item = db.get_row('item', ['id',item_id], 'item,number,borrow,sheet')[0]
+    new_id = int(db.get_row('sqlite_sequence', ['name','item_record'], 'seq')[0][0]) + 1
+    record = db.get_row('item_record', ['id',item[3]], 'borrow,note')[0] if method == 'return' else ['','']
+
+    datas = {
+        'item_id': item_id,
+        'item_name': item[0],
+        'item_number': item[1],
+        'borrow_date': now_time() if method == 'borrow' else record[0],
+        'return_date': now_time() if method == 'return' else '',
+        'new_id': new_id if method == 'borrow' else 'return',
+    }
+    return render_template('/sheet.html',datas=datas)
+
 @app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):
     match method:
@@ -195,8 +211,21 @@ def process_database(method):
             item_number = request.form['itemNumber']
             note = request.form.get('note', '')
             return pdb.additem(item_name, item_number, note)
-        case 'search_history':
+        case 'borrow_and_return':
             assert request.method == 'POST', 'Only POST requests are accepted'
+            if request.form.get('new_id') == 'return':
+                sheet_id = db.get_row('item',['id',request.form.get('item_id')],'sheet')[0][0]
+                person = db.get_row('item_record',['id',sheet_id],'person')[0][0]
+                if person != request.form.get('person'):
+                    return redirect(url_for('alert', message="借出人與歸還人不符"))
+                db.revise('item_record',['id',sheet_id],['return',now_time()])
+                db.revise('item',['id',request.form.get('item_id')],['borrow',''])
+                return redirect('/')
+            else:
+                db.add('item_record', 'person,item,borrow,note', f"'{request.form.get('person')}','{request.form.get('item_id')}','{now_time()}','{request.form.get('note')}'")
+                db.revise('item',['id',request.form.get('item_id')],['borrow','已借出'])
+                db.revise('item',['id',request.form.get('item_id')],['sheet',request.form.get('new_id')])
+                return redirect('/')
         case _:
             pass
   
