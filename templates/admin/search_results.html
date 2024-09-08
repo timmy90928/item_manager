@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>搜尋結果</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/search_results.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon">
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon">
+    </head>
+    <body>
+        <div class="background-container">
+            <img src="{{ url_for('static', filename='picture/university_logo.png') }}" class="background-watermark">
+        </div>
+        <header>
+            <h1>國立中正大學 通訊工程學系</h1>
+            <h2>物品管理系統</h2>
+        </header>
+
+        <main>
+            <div class="content-wrapper">
+                <div class="header-section">
+                    <a href="{{ url_for('search') }}" class="return-button">返回搜尋</a>
+                    <h3>搜尋結果</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>學生證卡號</th>
+                            <th>財產編號</th>
+                            <th>借出狀況</th>
+                            <th>歸還狀況</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in datas %}
+                            <tr>
+                                <td>{{ data[0] }}</td>
+                                <td>{{ data[1] }}</td>
+                                <td>{{ data[2] }}</td>
+                                <td>{{ data[3] }}</td>
+                                <td>{{ data[4] }}</td>
+                                <td>{{ data[5] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <footer>
+            <p>國立中正大學 人工智慧實驗室</p>
+            <p>© 2024 Artificial Intelligence Laboratory</p>
+        </footer>
+    </body>
+</html>

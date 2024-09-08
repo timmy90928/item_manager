@@ -162,25 +162,47 @@ def item(page):
 
 @app.route("/search", methods=['GET', 'POST'])
 def search():
-    if request.method == 'POST':
-        borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
-        _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
-        person  = f"%{request.form.get('studentId')}%" if request.form.get('studentId') else "%"
-        item    = f"%{request.form.get('propertyNumber')}%" if request.form.get('propertyNumber') else "%"
-        note    = f"%{request.form.get('note')}%" if request.form.get('note') else "%"
-        
-        search = {
-            'borrow': borrow,
-            'return': _return,
-            'person': person,
-            'item': item,
-            'note': note
-        }
-        datas = db.get_col('item_record', '*', search)
-        return render_template('/admin/search_history.html',datas=datas)
+    return render_template('/admin/search_history.html')
+
+@app.route("/search_results", methods=['POST'])
+def search_results():
+    borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
+    _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
+    person  = f"%{request.form.get('studentId')}%" if request.form.get('studentId') else "%"
+    item    = f"%{request.form.get('propertyNumber')}%" if request.form.get('propertyNumber') else "%"
+    note    = f"%{request.form.get('note')}%" if request.form.get('note') else "%"
     
-    datas = db.get_col('item_record', '*')
-    return render_template('/admin/search_history.html',datas=datas)
+    search = {
+        'borrow': borrow,
+        'return': _return,
+        'person': person,
+        'item': item,
+        'note': note
+    }
+    datas = db.get_col('item_record', '*', search)
+    return render_template('/admin/search_results.html', datas=datas)
+
+# @app.route("/search", methods=['GET', 'POST'])
+# def search():
+#     if request.method == 'POST':
+#         borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
+#         _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
+#         person  = f"%{request.form.get('studentId')}%" if request.form.get('studentId') else "%"
+#         item    = f"%{request.form.get('propertyNumber')}%" if request.form.get('propertyNumber') else "%"
+#         note    = f"%{request.form.get('note')}%" if request.form.get('note') else "%"
+        
+#         search = {
+#             'borrow': borrow,
+#             'return': _return,
+#             'person': person,
+#             'item': item,
+#             'note': note
+#         }
+#         datas = db.get_col('item_record', '*', search)
+#         return render_template('/admin/search_history.html',datas=datas)
+    
+#     datas = db.get_col('item_record', '*')
+#     return render_template('/admin/search_history.html',datas=datas)
 
 @app.route("/sheet/<item_id>/<method>",methods=['GET'])
 def sheet(item_id,method):
