@@ -5,21 +5,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>檔案管理</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
-        <link rel="stylesheet" href="{{ url_for('static', filename='admin/item_list.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/upload.css') }}">
         <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
         <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
     </head>
     <body>
-        <h1>File Upload</h1>
+        <div class="background-container">
+            <img src="{{ url_for('static', filename='picture/university_logo.png') }}" class="background-watermark">
+        </div>
+        <header>
+            <h1>國立中正大學 通訊工程學系</h1>
+            <h2>物品管理系統</h2>
+        </header>
+
+        <h3>檔案上傳</h3>
 
         <form method="POST" enctype="multipart/form-data" action="{{ url_for('upload') }}">
-            <input type="file" name="file">
-            <input type="submit" value="Upload">
+            <label for="file-upload" class="file-upload-label">選擇檔案</label>
+            <input id="file-upload" type="file" name="file">
+            <input type="submit" value="上傳">
         </form>
 
-        <h2>Uploaded Files</h2>
         <main>
             <div class="content-wrapper">
+                <div class="header-section">
+                    <a href="{{ url_for('admin') }}" class="return-button">返回管理員介面</a>
+                    <h3 class="second-title">已上傳檔案</h3>
+                </div>
                 <table>
                     <thead>
                         <tr>
@@ -28,8 +40,8 @@
                             <th>上次存取時間</th>
                             <th>上次修改時間</th>
                             <th>建立時間</th>
-                            <th>下載</th>
-                            <th>刪除</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,15 +52,38 @@
                                 <td>{{ file[2] }}</td>
                                 <td>{{ file[3] }}</td>
                                 <td>{{ file[4] }}</td>
-                                <td><a href="{{ url_for('download', filename=file[0]) }}">Download</a></td>
-                                <td><a href="{{ url_for('delete_file', filename=file[0]) }}">Delete</a></td>
+                                <td><a href="{{ url_for('download', filename=file[0]) }}">下載</a></td>
+                                <td><a href="{{ url_for('delete_file', filename=file[0]) }}" class="delete-link">刪除</a></td>
                             </tr>
                         {% else %}
-                            <a>No files uploaded yet.</a>
+                            <tr>
+                                <td colspan="7" style="text-align: center;">尚未上傳任何檔案。</td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </main>
+
+        <footer>
+            <p>國立中正大學 人工智慧實驗室</p>
+            <p>© 2024 Artificial Intelligence Laboratory</p>
+        </footer>
+
+        <script>
+            document.querySelectorAll('.delete-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!confirm('確定要刪除這個檔案嗎？')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+
+            // 顯示選擇的檔案名稱
+            document.getElementById('file-upload').addEventListener('change', function(e) {
+                var fileName = e.target.files[0] ? e.target.files[0].name : '選擇檔案';
+                document.querySelector('.file-upload-label').textContent = fileName;
+            });
+        </script>
     </body>
 </html>
