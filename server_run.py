@@ -130,6 +130,21 @@ def item(page):
                     item[4]   # 備註
                 ])
             return render_template('/admin/item_list.html', items=formatted_items)
+        case 'condition':
+            table_name = 'item_record'
+            item_condition = db.get_col(table_name, '*', ['id', '%'])
+            # 確保數據格式對應表格標題
+            formatted_items = []
+            for item in item_condition:
+                formatted_items.append([
+                    item[0],  # ID
+                    item[1],  # 學生證卡號
+                    item[2],  # 財產編號
+                    item[3],  # 借出狀況
+                    item[4],  # 歸還狀況
+                    item[5],  # 備註
+                ])
+            return render_template('/admin/item_condition.html', items=formatted_items)
         case _:
             pass
 
