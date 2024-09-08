@@ -43,21 +43,23 @@ main {
     margin-right: 20px;
 }
 
-.form-group input[type="number"]:last-child {
-    margin-right: 0; /* 最後一個欄位不需要右邊距 */
-}
-
 .form-group input[type="text"] {
     width: 100%;
     padding: 3px;
     box-sizing: border-box;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin: 20px 0px 20px 10px;
+    gap: 30px;
+}
+
 .btn {
-    display: block;
-    width: 40%;
+    width: 45%;
     padding: 10px 0;
-    background-color: #3484ce;
     color: white;
     text-decoration: none;
     border-radius: 6px;
@@ -67,17 +69,23 @@ main {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: none;
     cursor: pointer;
-    margin: 20px auto;
 }
 
-.btn:hover {
-    background-color: #2b6ba7;
-    transform: translateY(-3px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+.btn-return {
+    background-color: #3484ce;
 }
 
 .btn-submit {
     background-color: #4CAF50;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-return:hover {
+    background-color: #2b6ba7;
 }
 
 .btn-submit:hover {
