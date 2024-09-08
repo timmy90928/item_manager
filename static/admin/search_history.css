@@ -1,0 +1,85 @@
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.admin-title {
+    font-size: 22px;
+    color: #024991;
+    margin-top: 90px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.search-history-form {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.form-group {
+    width: 100%;
+    margin-left: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #024991;
+}
+
+.form-group input[type="number"] {
+    width: 26%;
+    display: inline-block;
+    padding: 3px;
+    margin-right: 20px;
+}
+
+.form-group input[type="number"]:last-child {
+    margin-right: 0; /* 最後一個欄位不需要右邊距 */
+}
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.btn {
+    display: block;
+    width: 40%;
+    padding: 10px 0;
+    background-color: #3484ce;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+    margin: 20px auto;
+}
+
+.btn:hover {
+    background-color: #2b6ba7;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
