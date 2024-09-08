@@ -39,7 +39,6 @@ class database:
             for n ,(key,value) in  enumerate(search.items()):
                 if n==0: _like += f"{key} LIKE '{value}'"
                 else: _like += f" AND {key} LIKE '{value}'"
-            print(f"SELECT {col_name} FROM {table} WHERE {_like}")
             return self.__call__(f"SELECT {col_name} FROM {table} WHERE {_like}")
         
     def get_row(self,table:str,row_name:list,col_name=None):

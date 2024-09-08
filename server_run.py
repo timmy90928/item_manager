@@ -165,7 +165,7 @@ def search():
         datas = db.get_col('item_record', '*', search)
         return render_template('/admin/search_history.html',datas=datas)
     
-    datas = db.get_col('item_record', '*', ['id', '%'])
+    datas = db.get_col('item_record', '*')
     return render_template('/admin/search_history.html',datas=datas)
 
 @app.route("/process_database/<method>",methods=['POST','GET'])
