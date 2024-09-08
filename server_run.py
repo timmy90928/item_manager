@@ -11,10 +11,11 @@ from utils.web import process_db
 
 
 app = Flask("Key Manager")
-app.secret_key = 'ailab120'
+app.secret_key = '6991728715539641924' # ailab120
 # app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set the maximum upload file size to 16MB.
 app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the address of the upload folder.
 app.config['SERVER_RUN_TIME'] = now_time()
+app.config['ITEM_MANAGER_VERSION'] = '1.0.0 beta'
 
 db=database('./writable/item_manager.db')
 pdb = process_db(db)
@@ -95,6 +96,7 @@ def server_info():
     data = {
         '伺服器名稱': node(),
         '伺服器系統': system(), 
+        '伺服器版本': app.config['ITEM_MANAGER_VERSION'],
         '伺服器啟動時間': app.config['SERVER_RUN_TIME'],
         '目前連線數':len(clients),
         '目前連線IP': str('、'.join(clients)),
@@ -109,29 +111,28 @@ def show(table_name):
 def admin():
     return render_template('/admin/main_page.html')
 
-@app.route("/itemlist")
-def itemlist():
-    table_name = 'item'
-    item = db.get_col(table_name, '*', ['id', '%'])
-    # 確保數據格式對應表格標題
-    formatted_items = []
-    for item in item:
-        formatted_items.append([
-            item[0],  # ID
-            item[1],  # 物品名稱
-            item[2],  # 財產編號
-            item[3],  # 借出狀況
-            item[4]   # 備註
-        ])
-    return render_template('/admin/item_list.html', items=formatted_items)
+@app.route("/item/<page>")
+def item(page):
+    match page:
+        case 'add':
+            return render_template('/admin/add_item.html')
+        case 'manager':
+            table_name = 'item'
+            item = db.get_col(table_name, '*', ['id', '%'])
+            # 確保數據格式對應表格標題
+            formatted_items = []
+            for item in item:
+                formatted_items.append([
+                    item[0],  # ID
+                    item[1],  # 物品名稱
+                    item[2],  # 財產編號
+                    item[3],  # 借出狀況
+                    item[4]   # 備註
+                ])
+            return render_template('/admin/item_list.html', items=formatted_items)
+        case _:
+            pass
 
-# @app.route('/delete_item/<int:item_id>', methods=['POST'])
-# @app.route('/additem', methods=['POST'])
-    
-@app.route("/add_item")
-def add_item():
-    return render_template('/admin/add_item.html')
-    
 @app.route("/process_database/<method>",methods=['POST','GET'])
 def process_database(method):
     match method:
