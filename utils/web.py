@@ -30,8 +30,8 @@ class process_db:
                 return return_page(False, '物品名稱不能為空', 400) # jsonify({"success": False, "message": "物品名稱不能為空"}), 400
             
             # 建立 col_name 和 value 字符串
-            col_name = 'item, number, borrow, note'
-            value = f"{repr(item_name)}, {repr(item_number)}, NULL, {repr(note)}"
+            col_name = 'item, number, note'
+            value = f"{repr(item_name)}, {repr(item_number)}, {repr(note)}"
             
             self.db.add('item', col_name, value)
             

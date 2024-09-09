@@ -20,14 +20,14 @@
 
         <main>
             <h3 class="admin-title">新增人員</h3>
-            <form id="addItemForm" class="add-item-form">
+            <form id="addItemForm" class="add-item-form" action="/process_database/add_verifier" method="POST">
                 <div class="form-group">
                     <label for="itemNumber">ID：</label>
-                    <input type="text" id="itemNumber" name="itemNumber" required>
+                    <input type="text" id="verifier_id" name="verifier_id" required>
                 </div>
                 <div class="form-group">
                     <label for="itemName">管理員名稱：</label>
-                    <input type="text" id="itemName" name="itemName" required>
+                    <input type="text" id="verifier_name" name="verifier_name" required>
                 </div>
                 <button type="submit" class="btn btn-submit">新增</button>
             </form>
@@ -38,7 +38,7 @@
             <p>© 2024 Artificial Intelligence Laboratory</p>
         </footer>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script>
             $(document).ready(function() {
                 $('#addItemForm').submit(function(e) {
@@ -53,8 +53,8 @@
                     }
                     
                     $.ajax({
-                        url: '/process_database/additem',
-                        type: 'GET',
+                        url: '/process_database/add_verifier',
+                        type: 'POST',
                         data: $(this).serialize(),
                         success: function(response) {
                             if (response.success) {
@@ -76,6 +76,6 @@
                     $('#itemNameWarning').hide();
                 });
             });
-        </script>
+        </script> -->
     </body>
 </html>

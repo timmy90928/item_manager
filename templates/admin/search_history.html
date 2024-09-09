@@ -23,11 +23,11 @@
             <form id="searchHistoryForm" class="search-history-form" action="{{ url_for('search_results') }}" method="POST">
                 <div class="form-group">
                     <label>借出時間：</label>
-                    <input type="text" id="borrowDate" name="borrowDate">
+                    <input type="text" id="borrowDate" name="borrowDate" placeholder ="YYYY-MM-DD">
                 </div>
                 <div class="form-group">
                     <label>歸還時間：</label>
-                    <input type="text" id="returnDate" name="returnDate">
+                    <input type="text" id="returnDate" name="returnDate" placeholder ="YYYY-MM-DD">
                 </div>
                 <div class="form-group">
                     <label for="studentId">學生證卡號：</label>

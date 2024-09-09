@@ -49,6 +49,7 @@ def alert(message: str) -> None:
     return render_template('alert.html', message=message)
 
 @app.route('/upload', methods=['GET', 'POST'])
+@login_required
 def upload():
     """
     Handles an upload request by saving the file to the configured upload folder.
@@ -280,6 +281,16 @@ def process_database(method):
                 db.revise('item',['id',request.form.get('item_id')],['borrow','已借出'])
                 db.revise('item',['id',request.form.get('item_id')],['sheet',request.form.get('new_id')])
                 return redirect('/')
+        case 'delete_verifier':
+            assert request.method == 'POST', 'Only POST requests are accepted'
+            db.delete('verifier',['id',request.args.get('id')])
+            return redirect('/verifier/manager')
+        case 'add_verifier':
+            assert request.method == 'POST', 'Only POST requests are accepted'
+            verifier_id = request.form['verifier_id']
+            verifier_name = request.form['verifier_name']
+            db.add('verifier', 'id,name',f"'{verifier_id}','{verifier_name}'")
+            return redirect('/verifier/manager')
         case _:
             pass
   
