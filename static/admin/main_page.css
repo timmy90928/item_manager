@@ -9,8 +9,8 @@ main {
 .admin-title {
     font-size: 22px;
     color: #024991;
-    margin-top: 30px;
-    margin-bottom: 60px;
+    margin-top: 10px;
+    margin-bottom: 40px;
     text-align: center;
 }
 
@@ -21,6 +21,7 @@ main {
     align-items: center;
     width: 100%;
     max-width: 250px;
+    margin-bottom: 10px;
 }
 
 .btn {
