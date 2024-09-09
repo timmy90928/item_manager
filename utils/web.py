@@ -1,5 +1,11 @@
 from flask import jsonify, request, Request
 from utils.db import database
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+
+class User(UserMixin):
+    def __init__(self, user_id, role='admin'):
+        self.id = user_id
+        self.role = role
 
 def return_page(success:str, message:str, state:int):
     return jsonify({"success": success, "message": message}), state

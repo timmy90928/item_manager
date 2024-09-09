@@ -1,10 +1,10 @@
 from flask import Flask,render_template,request,url_for,redirect,make_response,session,abort,send_from_directory
 from utils.db import database
-from utils.utils import now_time,convert_size,datetime,copy_file,sha
+from utils.utils import now_time,convert_size,datetime,copy_file,sha,timedelta
 from os import getcwd,path,makedirs,listdir,stat,remove
 from time import time
 from platform import system,node
-from utils.web import process_db, check_file
+from utils.web import process_db, check_file, LoginManager, User, login_user, logout_user, login_required
     
 # from utils.web import set_cookie,get_cookie
 # from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user # https://ithelp.ithome.com.tw/articles/10328420
@@ -16,9 +16,13 @@ app.secret_key = '92644cb198bc1416d96563067f306ba738bc11750e0f163017e8ddfb8f2d71
 app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the address of the upload folder.
 app.config['SERVER_RUN_TIME'] = now_time()
 app.config['ITEM_MANAGER_VERSION'] = '1.0.0 beta'
+app.config['REMEMBER_COOKIE_DURATION'] = timedelta(hours=1)
 
 db=database('./writable/item_manager.db')
 pdb = process_db(db)
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
 clients = {}
 
 @app.before_request
@@ -34,6 +38,11 @@ def remove_client(exc=None):
         if time() - timestamp > 300:  # 5 minutes
             del clients[ip]
 
+@app.context_processor
+def inject_global_vars():
+    return {
+        'site_header_title': '國立中正大學 通訊工程學系',
+    }
 @app.route('/alert/<message>', methods=['GET'])
 def alert(message: str) -> None:
     """Prints an alert message to the terminal."""
@@ -90,6 +99,8 @@ def index():
     item = db.get_col(table_name, '*')
     return render_template('/admin/item_list.html', items=item,title='物品管理系統')
 
+@login_manager.user_loader
+def load_user(user_id):return User(user_id)
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -98,12 +109,19 @@ def login():
         verify = db.get_row('account', ['name',username],'password,permissions')[0]
 
         if  sha(password) == verify[0] and verify[1] == 'admin':
+            user = User(username)
+            login_user(user)
             return redirect(url_for('admin'))
         else:
             return redirect(url_for('alert',message='帳號密碼錯誤'))
     return render_template('login.html')
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
 
 @app.route("/server_info")
+@login_required
 def server_info():
     data = {
         '伺服器名稱': node(),
@@ -116,14 +134,17 @@ def server_info():
     return render_template('admin/server_info.html',data=data)
 
 @app.route("/show/<table_name>")
+@login_required
 def show(table_name):
     return render_template('show.html',name=table_name,datas=db.get_col(table_name,'*'),heads=db.get_head(table_name))
 
 @app.route("/admin")
+@login_required
 def admin():
     return render_template('/admin/main_page.html')
 
 @app.route("/item/<page>")
+@login_required
 def item(page):
     match page:
         case 'add':
@@ -161,10 +182,12 @@ def item(page):
             pass
 
 @app.route("/search", methods=['GET', 'POST'])
+@login_required
 def search():
     return render_template('/admin/search_history.html')
 
 @app.route("/search_results", methods=['POST'])
+@login_required
 def search_results():
     borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
     _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
@@ -181,28 +204,6 @@ def search_results():
     }
     datas = db.get_col('item_record', '*', search)
     return render_template('/admin/search_results.html', datas=datas)
-
-# @app.route("/search", methods=['GET', 'POST'])
-# def search():
-#     if request.method == 'POST':
-#         borrow  = f"%{request.form.get('borrowDate')}%" if request.form.get('borrowDate') else "%"
-#         _return = f"%{request.form.get('returnDate')}%" if request.form.get('returnDate') else "%"
-#         person  = f"%{request.form.get('studentId')}%" if request.form.get('studentId') else "%"
-#         item    = f"%{request.form.get('propertyNumber')}%" if request.form.get('propertyNumber') else "%"
-#         note    = f"%{request.form.get('note')}%" if request.form.get('note') else "%"
-        
-#         search = {
-#             'borrow': borrow,
-#             'return': _return,
-#             'person': person,
-#             'item': item,
-#             'note': note
-#         }
-#         datas = db.get_col('item_record', '*', search)
-#         return render_template('/admin/search_history.html',datas=datas)
-    
-#     datas = db.get_col('item_record', '*')
-#     return render_template('/admin/search_history.html',datas=datas)
 
 @app.route("/sheet/<item_id>/<method>",methods=['GET'])
 def sheet(item_id,method):
