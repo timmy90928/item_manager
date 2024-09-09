@@ -143,6 +143,24 @@ def show(table_name):
 def admin():
     return render_template('/admin/main_page.html')
 
+@app.route("/verifier/<page>")
+@login_required
+def verifier(page):
+    match page:
+        case 'add':
+            return render_template('/admin/add_admin.html')
+        case 'manager':
+            table_name = 'verifier'
+            item = db.get_col(table_name, '*')
+            # 確保數據格式對應表格標題
+            formatted_items = []
+            for item in item:
+                formatted_items.append([
+                    item[0],  # ID
+                    item[1],  # 管理員名稱
+                ])
+            return render_template('/admin/admin_list.html', items=formatted_items,title='物品清單')
+        
 @app.route("/item/<page>")
 @login_required
 def item(page):

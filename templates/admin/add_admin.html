@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>新增物品</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/add_admin.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+    </head>
+    <body>
+        <div class="background-container">
+            <img src="{{ url_for('static', filename='picture/university_logo.png') }}" class="background-watermark">
+        </div>
+        <header>
+            <h1>{{ site_header_title }}</h1>
+            <h2>物品管理系統</h2>
+        </header>
+
+        <main>
+            <h3 class="admin-title">新增人員</h3>
+            <form id="addItemForm" class="add-item-form">
+                <div class="form-group">
+                    <label for="itemNumber">ID：</label>
+                    <input type="text" id="itemNumber" name="itemNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemName">管理員名稱：</label>
+                    <input type="text" id="itemName" name="itemName" required>
+                </div>
+                <button type="submit" class="btn btn-submit">新增</button>
+            </form>
+        </main>
+
+        <footer>
+            <p>國立中正大學 人工智慧實驗室</p>
+            <p>© 2024 Artificial Intelligence Laboratory</p>
+        </footer>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#addItemForm').submit(function(e) {
+                    e.preventDefault();
+                    
+                    var itemName = $('#itemName').val().trim();
+                    var itemNameWarning = $('#itemNameWarning');
+                    
+                    if (itemName === '') {
+                        itemNameWarning.text('請輸入管理員名稱！').show();
+                        return;
+                    }
+                    
+                    $.ajax({
+                        url: '/process_database/additem',
+                        type: 'GET',
+                        data: $(this).serialize(),
+                        success: function(response) {
+                            if (response.success) {
+                                alert('管理員新增成功！');
+                                // 回到上一頁並重新載入
+                                window.location.href = document.referrer;
+                            } else {
+                                itemNameWarning.text(response.message).show();
+                            }
+                        },
+                        error: function() {
+                            itemNameWarning.text('新增失敗，請稍後再試。').show();
+                        }
+                    });
+                });
+
+                // 當使用者開始輸入時，隱藏警告消息
+                $('#itemName').on('input', function() {
+                    $('#itemNameWarning').hide();
+                });
+            });
+        </script>
+    </body>
+</html>

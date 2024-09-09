@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='admin/admin_list.css') }}">
+        <link rel="icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+        <link rel="shortcut icon" href="{{ url_for('static', filename = 'picture/object-icon-2.ico') }}" type="image/x-icon" >
+    </head>
+    <body>
+        <div class="background-container">
+            <img src="{{ url_for('static', filename='picture/university_logo.png') }}" class="background-watermark">
+        </div>
+        <header>
+            <h1>{{ site_header_title }}</h1>
+            <h2>物品管理系統</h2>
+        </header>
+        
+        <main>
+            <div class="content-wrapper">
+                <div class="header-section">
+                    <a href="{{ url_for('admin') }}" class="return-button">返回管理員介面</a>
+                    <h3>管理員清單</h3>
+                    <a href="{{ url_for('verifier', page='add') }}" class="add-button">新增人員</a>
+                </div>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>管理員姓名</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ item[0] }}</td><!-- ID -->
+                                <td>{{ item[1] }}</td><!-- 管理員姓名 -->
+                                <td>
+                                    <button class="delete-button" data-id="{{ item[0] }}">刪除</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+        
+        <footer>
+            <p>國立中正大學 人工智慧實驗室</p>
+            <p>© 2024 Artificial Intelligence Laboratory</p>
+        </footer>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('.delete-button').click(function() {
+                    var itemId = $(this).data('id');
+                    if (confirm('確定要刪除這個項目嗎？')) {
+                        $.ajax({
+                            url: '/process_database/delete_item?item_id=' + itemId,
+                            type: 'POST',
+                            success: function(result) {
+                                alert('項目已成功刪除');
+                                location.reload();
+                            },
+                            error: function(error) {
+                                alert('刪除失敗，請稍後再試');
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

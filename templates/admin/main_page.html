@@ -22,6 +22,7 @@
             <h3 class="admin-title">管理員介面</h3>
             <div class="button-container">
                 <a href="{{ url_for('item',page='manager') }}" class="btn">管理物品清單</a>
+                <a href="{{ url_for('verifier',page='manager') }}" class="btn">管理員清單</a>
                 <a href="{{ url_for('item',page='condition') }}" class="btn">物品借出狀況</a>
                 <a href="{{ url_for('search') }}" class="btn">搜尋歷史紀錄</a>
                 <a href="{{ url_for('server_info') }}" class="btn">伺服器資訊</a>
