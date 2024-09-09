@@ -239,12 +239,24 @@ def process_database(method):
             if request.form.get('new_id') == 'return':
                 sheet_id = db.get_row('item',['id',request.form.get('item_id')],'sheet')[0][0]
                 person = db.get_row('item_record',['id',sheet_id],'person')[0][0]
+
                 if person != request.form.get('person'):
                     return redirect(url_for('alert', message="借出人與歸還人不符"))
+                
+                try:
+                    verifier_name= db.get_row('verifier',['ID',request.form.get('verifier')],'name')[0][0]
+                except IndexError:
+                    return redirect(url_for('alert', message="驗證人員錯誤"))
+
                 db.revise('item_record',['id',sheet_id],['return',now_time()])
                 db.revise('item',['id',request.form.get('item_id')],['borrow',''])
                 return redirect('/')
             else:
+                try:
+                    verifier_name= db.get_row('verifier',['ID',request.form.get('verifier')],'name')[0][0]
+                except IndexError:
+                    return redirect(url_for('alert', message="驗證人員錯誤"))
+                
                 db.add('item_record', 'person,item,borrow,note', f"'{request.form.get('person')}','{request.form.get('item_id')}','{now_time()}','{request.form.get('note')}'")
                 db.revise('item',['id',request.form.get('item_id')],['borrow','已借出'])
                 db.revise('item',['id',request.form.get('item_id')],['sheet',request.form.get('new_id')])
