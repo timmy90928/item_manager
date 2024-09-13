@@ -1,7 +1,26 @@
 from flask import jsonify, request, Request
 from utils.db import database
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+import requests
+from datetime import datetime
 
+def get_latest_release(repo_name: str, repo_owner: str = 'timmy90928') -> tuple[str, str, str]:
+    """
+    Get the latest release information from GitHub.
+
+    Returns: A tuple of (latest_version, latest_download_url, updated)
+    """
+    url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/releases/latest'
+    # https://api.github.com/repos/timmy90928/item_manager/releases/latest
+    response = requests.get(url)
+    if response.status_code == 200:
+        release_info = response.json()              # Parse the JSON response.
+        latest_version = release_info['tag_name']   # Get the latest version.
+        assets = release_info['assets'][0]          # Get the download URL of the latest version.
+        url = assets['browser_download_url']
+        updated = datetime.strptime(assets['updated_at'], "%Y-%m-%dT%H:%M:%SZ") # Get the date and time of the latest version.
+        return latest_version, url, str(updated)
+    
 class User(UserMixin):
     def __init__(self, user_id, role='admin'):
         self.id = user_id

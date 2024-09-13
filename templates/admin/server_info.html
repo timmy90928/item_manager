@@ -38,6 +38,10 @@
                                 <td>{{ value }}</td>
                             </tr>
                         {% endfor %}
+                        <tr>
+                            <td>最新版本</td>
+                            <td><a href="{{ release[1] }}">{{ release[0] }}</a> (更新時間: {{ release[2] }})</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

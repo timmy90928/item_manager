@@ -4,18 +4,18 @@ from utils.utils import now_time,convert_size,datetime,copy_file,sha,timedelta
 from os import getcwd,path,makedirs,listdir,stat,remove
 from time import time
 from platform import system,node
-from utils.web import process_db, check_file, LoginManager, User, login_user, logout_user, login_required
+from utils.web import process_db, check_file, LoginManager, User, login_user, logout_user, login_required,get_latest_release
     
 # from utils.web import set_cookie,get_cookie
 # from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user # https://ithelp.ithome.com.tw/articles/10328420
 
 
-app = Flask("Key Manager")
+app = Flask("Item Manager")
 app.secret_key = '92644cb198bc1416d96563067f306ba738bc11750e0f163017e8ddfb8f2d71a6' # ailab120
 # app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # Set the maximum upload file size to 16MB.
 app.config['UPLOAD_FOLDER'] = path.join(getcwd(), 'writable') # Define the address of the upload folder.
 app.config['SERVER_RUN_TIME'] = now_time()
-app.config['ITEM_MANAGER_VERSION'] = '1.0.0 beta'
+app.config['ITEM_MANAGER_VERSION'] = '1.0.0-beta.2'
 app.config['REMEMBER_COOKIE_DURATION'] = timedelta(hours=1)
 
 db=database('./writable/item_manager.db')
@@ -124,6 +124,7 @@ def logout():
 @app.route("/server_info")
 @login_required
 def server_info():
+    latest_version, latest_download_url, updated = get_latest_release('item_manager')
     data = {
         '伺服器名稱': node(),
         '伺服器系統': system(), 
@@ -132,7 +133,7 @@ def server_info():
         '目前連線數':len(clients),
         '目前連線IP': str('、'.join(clients)),
     }
-    return render_template('admin/server_info.html',data=data)
+    return render_template('admin/server_info.html',data=data, release = [latest_version, latest_download_url, updated])
 
 @app.route("/show/<table_name>")
 @login_required
