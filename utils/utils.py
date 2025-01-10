@@ -1,5 +1,7 @@
 from datetime import timedelta,datetime,timedelta
-from shutil import copy2
+from shutil import copy2, rmtree, ignore_patterns, copytree
+from os import environ,mkdir
+from os.path import isfile, isdir, split as path_split,join
 from base64 import b64encode,b64decode
 from typing import Union
 import math
@@ -7,7 +9,6 @@ from hashlib import sha3_256
 def sha(text:str) -> str:
     return sha3_256(text.encode()).hexdigest()
 
-    
 def read_card_data() -> str:
     """
     Reads card data from the card reader.
@@ -45,18 +46,32 @@ def msgw(title:str="Title", text:str="contant", style:int=0, time:int=0) -> int:
 def now_time() -> str:
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-def copy_file(dst: str, src: str = './writable/item_manager.db') -> None:
+def copy(src:str, dst:str, ignore:list = [], return_format:str = '{mode}: {src} -> {dst}') -> str:
     """
     Copies a file from the `src` path to the `dst` path.
 
     :param src: The source file path. Must be a Path object.
     :param dst: The destination file path. Must be a Path object.
-    :return: None
+
+    >>> copy()
+    Traceback (most recent call last):
+    ...
+    TypeError: copy() missing 2 required positional arguments: 'src' and 'dst'
     """
     if not src or not dst:
         raise ValueError("Both src and dst must be non-empty")
     try:
-        copy2(src, dst)
+        if isdir(src):
+            mode = 'dir'
+            dst = join(dst,path_split(src)[-1])
+            copytree(src, dst, ignore=ignore_patterns(*ignore), dirs_exist_ok=True)
+        elif isfile(src):
+            mode = 'file'
+            copy2(src, dst)
+        else:
+            raise ValueError(f"{src} is neither a file nor a directory")
+        _format = {'src': src, 'dst': dst, 'mode':mode}
+        return return_format.format(**_format)
     except OSError as e:
         raise OSError(f"Error copying file from {src} to {dst}: {e}") from e
 
@@ -95,6 +110,30 @@ class base64:
         decoded_string = b64decode(self.data).decode()
         return decoded_string.split(",") if "," in decoded_string else decoded_string
         
+def get_data_path(dir_name:str, copy_dir_or_file:list, root_dir:str = None) -> Union[bool, str]:
+    """
+    Return the path to the directory for storing application data, or a tuple of a boolean and the path.
+    
+    >>> exists,program_data_path = get_data_path('Intel')
+
+    :param dir_name: The name of the directory to create.
+    :param copy_dir_or_file: A list of files/directories to copy into the created directory.
+    :param replace: Whether to replace the directory if it already exists.
+    :return: A tuple of a boolean and the path to the created directory.If the directory already existed, the boolean will be True.
+
+    """
+    program_data_path = join(environ.get('ProgramData', '/var/lib'), dir_name)
+    no_exists = not isdir(program_data_path)
+    if no_exists:
+        mkdir(program_data_path)
+        for dir_or_file in copy_dir_or_file:
+            dir_or_file = join(root_dir, dir_or_file) if root_dir else dir_or_file
+            c =  copy(dir_or_file, program_data_path)
+            # print(c)
+        return False,program_data_path
+    else:
+        return True,program_data_path
+    
 def convert_size(size_bytes):
     if size_bytes == 0:
         return "0B"
